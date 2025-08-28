@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+
+@font-face {
+  font-family: 'BoldWishClean';
+  src: url('./assets/fonts/BoldWishClean-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'BoldWishRough';
+  src: url('./assets/fonts/BoldWishRough-Regular.otf') format('opentype');
+}
+
+/* Define custom font utilities via @theme (no config file needed) */
+@theme {
+  --font-boldwishclean: BoldWishClean, sans-serif;
+  --font-boldwishrough: BoldWishRough, sans-serif;
+}
+
+
+.text-gradient {
+  background: linear-gradient(to right, #ED05CF, #2E0079);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px #62FFFD;
+}
+
+.glass-effect {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.2), #58D1D7, #007379);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.custom-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: linear-gradient(to right, #ED05CF, #7C21E1, #2E0079);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: inset -4.57px 6.86px 4.57px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.2s;
+}
+
+.custom-button:hover {
+  transform: scale(1.05);
+}

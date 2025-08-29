@@ -8,7 +8,7 @@ import greenStone from "../../assets/greenStone.svg";
 import greenStoneGlow from "../../assets/greenStoneGlow.svg";
 import pinkStone from "../../assets/pinkStone.svg";
 import pinkStoneGlow from "../../assets/pinkStoneGlow.svg";
-import yellowStone from "../../assets/yellowStone.svg";
+import yellowStone from "../../assets/yellowstone.svg";
 import yellowStoneGlow from "../../assets/yellowStoneGlow.svg";
 import purpleStone from "../../assets/purpleStone.svg";
 import purpleStoneGlow from "../../assets/purpleStoneGlow.svg";

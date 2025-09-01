@@ -53,13 +53,7 @@
       rgba(0, 115, 121, 0.2) 100%
     );
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
   padding: 8px 16px 8px 15px;
-}
-
-.glass1-effect-rounded {
-  padding: 6px 12px;
-  border-radius: 32px;
 }
 
 .font-smoochsans {

@@ -2,119 +2,24 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Background from "../../assets/missionbackground.svg";
 
-import blueStone from "../../assets/blueStone.svg";
-import blueStoneGlow from "../../assets/blueStoneGlow.svg";
-import greenStone from "../../assets/greenStone.svg";
-import greenStoneGlow from "../../assets/greenStoneGlow.svg";
-import pinkStone from "../../assets/pinkStone.svg";
-import pinkStoneGlow from "../../assets/pinkStoneGlow.svg";
-import yellowStone from "../../assets/yellowStone.svg";
-import yellowStoneGlow from "../../assets/yellowStoneGlow.svg";
-import purpleStone from "../../assets/purpleStone.svg";
-import purpleStoneGlow from "../../assets/purpleStoneGlow.svg";
+import { cardData } from "../../constant/missionDetailCardData";
+import { StoneData } from "../../constant/missionDetailSoneData";
+import { useProgress } from "../../context/ProgressContext";
 
-const StoneData = [
-  {
-    id: 1,
-    normal: blueStone,
-    glow: blueStoneGlow,
-    dimension: "h-[234px] w-[255px]",
-    glowDimension: "h-[274px] w-[285px]",
-    position: "bottom-[-17.57px] left-[712px]",
-  },
-  {
-    id: 2,
-    normal: greenStone,
-    glow: greenStoneGlow,
-    dimension: "h-[88px] w-[108px]",
-    glowDimension: "h-[108px] w-[128px]",
-    position: "bottom-[278px] left-[565px]",
-  },
-  {
-    id: 3,
-    normal: pinkStone,
-    glow: pinkStoneGlow,
-    dimension: "h-[184px] w-[117px]",
-    glowDimension: "h-[204px] w-[137px]",
-    position: "bottom-[114.58px] right-[250px]",
-  },
-  {
-    id: 4,
-    normal: yellowStone,
-    glow: yellowStoneGlow,
-    dimension: "h-[134px] w-[242px]",
-    glowDimension: "h-[154px] w-[262px]",
-    position: "bottom-[74.8px] left-[300px]",
-  },
-  {
-    id: 5,
-    normal: purpleStone,
-    glow: purpleStoneGlow,
-    dimension: "h-[144px] w-[178px]",
-    glowDimension: "h-[164px] w-[198px]",
-    position: "bottom-[170.98px] left-[415px]",
-  },
-];
-const cardData = [
-  {
-    id: 1,
-    title: "Take a look inside",
-    description:
-      "These concepts will provide clarity and will guide us in understanding the relevance of these topics in this digital era.",
-    buttonTitle: "Take Look",
-    // className: "bottom-[370px] left-[300px]",
-    className: "bottom-[36.13%] left-[20.83%]",
-    link: "take-look",
-  },
-  {
-    id: 2,
-    title: "Key Concept",
-    description:
-      "These concepts will provide clarity and will guide us in understanding the relevance of these topics in this digital era.",
-    buttonTitle: "Learn Key Concept",
-    // className: "bottom-[424px] left-[642px]",
-    className: "bottom-[41.41%] left-[44.58%]",
-    link: "key-concept",
-  },
-  {
-    id: 3,
-    title: "Inspiring Notes",
-    description:
-      "These concepts will provide clarity and will guide us in understanding the relevance of these topics in this digital era.",
-    buttonTitle: "Read Inspiring Notes",
-    // className: "bottom-[277px] right-[337px]",
-    className: "bottom-[27.05%] right-[23.40%]",
-    link: "inspiring-notes",
-  },
-  {
-    id: 4,
-    title: "Want to go deeper",
-    description:
-      "These concepts will provide clarity and will guide us in understanding the relevance of these topics in this digital era.",
-    buttonTitle: "Lets go !",
-    // className: "bottom-[349px] right-[92px]",
-    className: "bottom-[34.08%] right-[6.39%]",
-    link: "deep-study",
-  },
-
-  {
-    id: 5,
-    title: "Lets Jump in",
-    description:
-      "These concepts will provide clarity and will guide us in understanding the relevance of these topics in this digital era.",
-    buttonTitle: "Jump In",
-    // className: "bottom-[162px] left-[624px]",
-    className: "bottom-[15.82%] left-[43.33%]",
-    link: "jump-in",
-  },
-];
-
-const Card = ({ title, description, buttonTitle, position, link }) => {
-  const navigate = useNavigate();
+const Card = ({
+  id,
+  title,
+  description,
+  buttonTitle,
+  position,
+  link,
+  unlocked,
+  onStart,
+}) => {
   return (
     <>
       <div
-        className={`h-[123px] w-[193px] glass1-effect font-smoochsans text-white flex flex-col gap-[10px] absolute ${position}`}
+        className={`h-[123px] w-[193px] glass1-effect rounded-[12px] font-smoochsans text-white flex flex-col gap-[10px] absolute ${position}`}
       >
         <div>
           <h1 className="font-[700] text-[20px] text-border-pink leading-[24px]">
@@ -127,10 +32,9 @@ const Card = ({ title, description, buttonTitle, position, link }) => {
 
         <div>
           <button
+            disabled={!unlocked}
             className="custom-button custom-button-rounded"
-            onClick={() =>
-              navigate(`/mission/1/${link}`, { state: { category: link } })
-            }
+            onClick={() => onStart(id, link)}
           >
             {buttonTitle}
           </button>
@@ -141,7 +45,24 @@ const Card = ({ title, description, buttonTitle, position, link }) => {
 };
 
 const MissionDetail = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { completedCards, currentProgress } = useProgress();
+  const handleStart = (id, link) => {
+    if (completedCards.includes(id)) {
+      // already finished → go to result
+      navigate(`/mission/1/${link}`, { state: { cardId: id } });
+    } else if (currentProgress[id]) {
+      // resume from saved progress
+
+      navigate(`/mission/1/${link}`, {
+        state: { cardId: id },
+      });
+    } else {
+      // new quiz → start from step 0
+
+      navigate(`/mission/1/${link}`, { state: { cardId: id, step: 0 } });
+    }
+  };
 
   return (
     <div
@@ -163,15 +84,20 @@ const MissionDetail = () => {
           Exploring The Galaxy Of Access To Information
         </p>
       </div>
-      {cardData?.map((data) => {
+      {cardData?.map((data, index) => {
+        const unlocked =
+          index === 0 || completedCards.includes(cardData[index - 1].id);
         return (
           <Card
             key={data.id}
+            id={data.id}
             title={data.title}
             description={data.description}
             buttonTitle={data.buttonTitle}
             position={data.className}
             link={data.link}
+            unlocked={unlocked}
+            onStart={handleStart}
           />
         );
       })}
